@@ -1,4 +1,4 @@
-use std::{fs, io::{self, Write}, process::Command};
+use std::{fs, io::{self, Write}};
 
 use consts::LADE_VERSION;
 use download_urls::LADE_URL;

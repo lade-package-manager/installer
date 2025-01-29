@@ -8,6 +8,7 @@ pub fn check_dependencies() {
             let status = Command::new("which")
                 .arg(depen)
                 .stdout(Stdio::null())
+                .stderr(Stdio::null())
                 .status()
                 .unwrap_or_else(|e| {
                     eprintln!(
@@ -28,6 +29,8 @@ pub fn check_dependencies() {
         } else {
             let status = Command::new("where")
                 .arg(depen)
+                .stdout(Stdio::null())
+                .stderr(Stdio::null())
                 .status()
                 .unwrap_or_else(|e| {
                     eprintln!(
