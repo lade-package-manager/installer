@@ -1,4 +1,4 @@
-name: Release Build on Linux
+name: Release Build on macOS
 
 on:
   workflow_dispatch: # 手動トリガー
