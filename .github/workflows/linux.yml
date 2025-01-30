@@ -37,14 +37,14 @@ jobs:
         key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-cargo-index-
-    - name: Chenge directory
-      run: cd lade-installer
 
     - name: Build
-      run: cargo build --release
+      run: |
+        cd lade-installer
+        cargo build --release
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: lade-weekly-linux-build
-        path: target/release/lade-installer
+        path: lade-installer/target/release/lade-installer
