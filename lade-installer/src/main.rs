@@ -16,6 +16,7 @@ mod unzip_file;
 mod set_env;
 
 fn main() {
+    
     info!("Starting installation of \"lade\" (v{})...", LADE_VERSION);
     info!("Checking dependencies...");
     check_dependencies::check_dependencies();

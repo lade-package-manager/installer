@@ -8,24 +8,36 @@ use winreg::RegKey;
 
 #[cfg(not(target_os = "windows"))]
 pub fn add_to_path(new_path: &str) -> io::Result<()> {
-    let home_dir = dirs_next::home_dir().ok_or(io::Error::new(io::ErrorKind::NotFound, "ホームディレクトリが見つかりません"))?;
-    let bashrc_path = home_dir.join(".bashrc");
+    use crate::info;
 
-    let file = OpenOptions::new().read(true).open(&bashrc_path)?;
-    let reader = BufReader::new(file);
-    let already_in_path = reader.lines().any(|line| {
-        let line = line.unwrap_or_default();
-        line.contains(&format!("export PATH=")) && line.contains(new_path)
-    });
+    let home_dir = dirs_next::home_dir().ok_or(io::Error::new(
+        io::ErrorKind::NotFound,
+        "Home directory not found",
+    ))?;
 
-    if already_in_path {
-        return Ok(());
+    let shell_files = vec![
+        (home_dir.join(".bashrc"), format!("export PATH=\"$PATH:{}\"", new_path)),
+        (home_dir.join(".zshrc"), format!("export PATH=\"$PATH:{}\"", new_path)),
+        (home_dir.join(".config/fish/config.fish"), format!("set -x PATH {} $PATH", new_path)),
+    ];
+
+    for (rc_file, export_cmd) in shell_files {
+        if rc_file.exists() {
+            let file = OpenOptions::new().read(true).open(&rc_file)?;
+            let reader = BufReader::new(file);
+            let already_in_path = reader.lines().any(|line| {
+                let line = line.unwrap_or_default();
+                line.contains(&export_cmd)
+            });
+
+            if !already_in_path {
+                let mut file = OpenOptions::new().append(true).open(&rc_file)?;
+                writeln!(file, "{}", export_cmd)?;
+                info!("Added {} to {}", new_path, rc_file.display());
+            }
+        }
     }
 
-    let mut file = OpenOptions::new().append(true).open(bashrc_path)?;
-    writeln!(file, "export PATH=\"$PATH:{}\"", new_path)?;
-
-    println!("Added to PATH enviroment variable");
     Ok(())
 }
 
