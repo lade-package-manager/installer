@@ -46,5 +46,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: lade-weekly-linux-build
+        name: installer-weekly-linux-build
         path: lade-installer/target/release/lade-installer
