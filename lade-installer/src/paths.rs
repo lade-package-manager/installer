@@ -35,5 +35,5 @@ pub fn lade_log_path() -> PathBuf {
 }
 
 pub fn lade_packages_installed_path() -> PathBuf {
-    lade_config_dir().unwrap().join("packages")
+    lade_config_dir().unwrap().join("installed")
 }
