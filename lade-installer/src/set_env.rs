@@ -1,10 +1,26 @@
-use std::io::{self, Write, BufRead, BufReader};
 use std::fs::OpenOptions;
+use std::io::{self, BufRead, BufReader, Write};
 
 #[cfg(target_os = "windows")]
 use winreg::enums::*;
 #[cfg(target_os = "windows")]
 use winreg::RegKey;
+
+#[macro_export]
+macro_rules! chmod {
+    ($path: expr) => {
+        if !cfg!(target_os = "windows") {
+            let status = std::process::Command::new("chmod")
+                .arg("+x")
+                .arg($path)
+                .status()
+                .unwrap();
+            if !status.success() {
+                eprintln!("\x1b[31;1m>>> \x1b[0m\x1b[1m Failed to chmod executable file\x1b[0m");
+            }
+        }
+    };
+}
 
 #[cfg(not(target_os = "windows"))]
 pub fn add_to_path(new_path: &str) -> io::Result<()> {
@@ -16,9 +32,18 @@ pub fn add_to_path(new_path: &str) -> io::Result<()> {
     ))?;
 
     let shell_files = vec![
-        (home_dir.join(".bashrc"), format!("export PATH=\"$PATH:{}\"", new_path)),
-        (home_dir.join(".zshrc"), format!("export PATH=\"$PATH:{}\"", new_path)),
-        (home_dir.join(".config/fish/config.fish"), format!("set -x PATH {} $PATH", new_path)),
+        (
+            home_dir.join(".bashrc"),
+            format!("export PATH=\"$PATH:{}\"", new_path),
+        ),
+        (
+            home_dir.join(".zshrc"),
+            format!("export PATH=\"$PATH:{}\"", new_path),
+        ),
+        (
+            home_dir.join(".config/fish/config.fish"),
+            format!("set -x PATH {} $PATH", new_path),
+        ),
     ];
 
     for (rc_file, export_cmd) in shell_files {
@@ -40,7 +65,6 @@ pub fn add_to_path(new_path: &str) -> io::Result<()> {
 
     Ok(())
 }
-
 
 #[cfg(target_os = "windows")]
 pub fn add_to_path(new_path: &str) -> io::Result<()> {

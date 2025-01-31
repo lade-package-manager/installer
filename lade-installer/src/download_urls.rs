@@ -1,4 +1,3 @@
-
 #[cfg(target_os = "linux")]
 pub const LADE_URL: &str =
     "https://github.com/lade-package-manager/lade/releases/download/0.1/lade-linux-build.zip";
