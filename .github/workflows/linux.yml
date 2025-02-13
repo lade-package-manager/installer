@@ -44,7 +44,7 @@ jobs:
         cargo build --release
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: installer-weekly-linux-build
         path: lade-installer/target/release/lade-installer
