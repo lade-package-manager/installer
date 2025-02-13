@@ -1,6 +1,7 @@
 use std::{
     fs,
-    io::{self, Write},
+    io::{self, BufRead, Write},
+    fs::File,
 };
 
 use consts::LADE_VERSION;
@@ -17,6 +18,12 @@ mod macros;
 mod paths;
 mod set_env;
 mod unzip_file;
+
+#[cfg(unix)]
+const TTY_PATH: &str = "/dev/tty";
+
+#[cfg(windows)]
+const TTY_PATH: &str = "CON";
 
 fn main() {
     info!("Starting installation of \"lade\" (v{})...", LADE_VERSION);
@@ -83,9 +90,13 @@ fn main() {
     println!("Do you want to include lade in your PATH environment variable?");
     print!("[y/N] ");
     io::stdout().flush().unwrap();
+
+    let tty = File::open(TTY_PATH).unwrap();
+    let mut reader = io::BufReader::new(tty);
     let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    if input.trim() == "y" || input.trim() == "" {
+    reader.read_line(&mut input).unwrap();
+
+    if input.trim() == "y" || input.trim().is_empty() {
         set_env::add_to_path(lade_bin_path().to_str().unwrap()).unwrap_or_else(|e| {
             eprintln!(
                 "\x1b[31;1m>>> \x1b[1mERROR: failed to add path: {}\x1b[0m",
@@ -103,3 +114,4 @@ fn main() {
     info!("Please run `lade update`");
     info!("Run 'lade --help' to get started.");
 }
+
