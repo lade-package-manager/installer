@@ -111,7 +111,6 @@ fn main() {
         "Installation of \"lade\" (v{}) completed successfully!",
         LADE_VERSION
     );
-    info!("Please run `lade update`");
-    info!("Run 'lade --help' to get started.");
+    info!("Run 'lade update; lade --help' to get started.");
 }
 
