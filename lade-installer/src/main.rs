@@ -46,7 +46,6 @@ y/n> "#;
     if y_or_n.trim() != "y"{
         eprintln!(
             "\x1b[31;1m>>> \x1b[1mInstallation canceled\x1b[0m",
-            e
         );
         std::process::exit(1);
     }
