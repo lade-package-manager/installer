@@ -3,13 +3,13 @@ ARCH=$(uname -m)
 
 
 if [ "$OS" = "Linux" ]; then
-    TARGET="https://github.com/lade-package-manager/installer/releases/download/0.1/lade-installer"
+    TARGET="https://github.com/lade-package-manager/installer/releases/download/0.2/lade-installer"
     FILE="lade-installer-linux"
 elif [ "$OS" = "Darwin" ]; then
-    TARGET="https://github.com/lade-package-manager/installer/releases/download/0.1/lade-installer-macos"
+    TARGET="https://github.com/lade-package-manager/installer/releases/download/0.2/lade-installer-macos"
     FILE="lade-installer-macos"
 elif [ "$OS" = "CYGWIN" ] || [ "$OS" = "MINGW" ] || [ "$OS" = "MSYS" ]; then
-    TARGET="lade-installer.exe"
+    TARGET="https://github.com/lade-package-manager/installer/releases/download/0.2/lade-installer.exe"
     FILE="lade-installer.exe"
 else
     echo "Unsupported OS"
@@ -24,4 +24,3 @@ chmod +x ./$FILE
 ./$FILE
 
 rm ./$FILE
-
