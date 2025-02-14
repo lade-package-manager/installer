@@ -26,6 +26,30 @@ const TTY_PATH: &str = "/dev/tty";
 const TTY_PATH: &str = "CON";
 
 fn main() {
+    let msg = r#"
+\x1b[1mWelcome to the lade installer!\x1b[0m
+
+This program installs lade into your environment and makes it executable.
+
+When you confirm the operation, this program will install lade into your environment.
+
+Are you sure?
+
+y/n> "#
+    let tty_first = File::open(TTY_PATH).unwrap();
+    let mut read = io::BufReader::new(tty);
+    let mut y_or_n = String::new();
+    print!("{}", msg);
+    io::stdout().flush().unwrap();
+    reader.read_line(&mut y_or_n).unwrap();
+    
+    if y_or_n.trim() != "y"{
+        eprintln!(
+            "\x1b[31;1m>>> \x1b[1mInstallation canceled\x1b[0m",
+            e
+        );
+        std::process::exit(1);
+    }
     info!("Starting installation of \"lade\" (v{})...", LADE_VERSION);
     info!("Checking dependencies...");
     check_dependencies::check_dependencies();
