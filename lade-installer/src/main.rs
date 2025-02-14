@@ -35,13 +35,13 @@ When you confirm the operation, this program will install lade into your environ
 
 Are you sure?
 
-y/n> "#
+y/n> "#;
     let tty_first = File::open(TTY_PATH).unwrap();
-    let mut read = io::BufReader::new(tty);
+    let mut read = io::BufReader::new(tty_first);
     let mut y_or_n = String::new();
     print!("{}", msg);
     io::stdout().flush().unwrap();
-    reader.read_line(&mut y_or_n).unwrap();
+    read.read_line(&mut y_or_n).unwrap();
     
     if y_or_n.trim() != "y"{
         eprintln!(
