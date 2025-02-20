@@ -27,7 +27,7 @@ const TTY_PATH: &str = "CON";
 
 fn main() {
     let msg = r#"
-\x1b[1mWelcome to the lade installer!\x1b[0m
+Welcome to the lade installer!
 
 This program installs lade into your environment and makes it executable.
 
